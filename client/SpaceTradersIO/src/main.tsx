@@ -1,13 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import Login from './Login.tsx'
+import Login from './pages/Login/Login.tsx'
+import Dashboard from './pages/Dashboard/Dashboard.tsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login/>,
+    element: <Login />,
   },
+  {
+    path: "/Dashboard",
+    element: <Dashboard />
+
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

@@ -63,7 +63,7 @@ def login():
         if existing_user:
             if bcrypt.checkpw(req_token.encode('utf-8'), existing_user.access_token.encode('utf-8')):
                 jwt_token = jwt.encode({"username": existing_user.username, "access_token": req_token}, secret_key, algorithm="HS256")
-                response = make_response(jsonify({"message": "user authenticated", "jwt": jwt_token}), 201)
+                response = make_response(jsonify({"message": "user authenticated", "jwt_token": jwt_token}), 201)
 
             else:
                 response = make_response(jsonify({"meesage": "Incorrect access_token"}), 401)
@@ -128,6 +128,22 @@ def register():
         new_user = Users(username=username, email=email, access_token=encoded_token.decode('utf-8'))
         db.session.add(new_user)
         db.session.commit()
+
+        html_body = f"""
+            <html>
+                <body>
+                    <h2>Hello {username}!</h2>
+                    <p>Your SpaceTraders account has been created.</p>
+                    <p>Please use the provided token to login and play:</p>
+                    <p><strong>Token:</strong> {access_token}</p>
+                </body>
+            </html>
+            """
+
+        msg = Message(subject='SpaceTraders Registration', sender=os.getenv("HOST_EMAIL"), recipients=[email])
+        msg.html = html_body
+        mail.send(msg)
+
         response = make_response(jsonify({"message": "account created"}), 201)
         return response
 
