@@ -1,0 +1,80 @@
+.grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.avatar {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h2 {
+    text-align: center;
+    color: orange;
+}
+
+.paper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.textfield:hover {
+    border-color: white;
+}
+
+h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: orange;
+    font-weight: bolder;
+}
+
+.loginBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/space.jpg');
+    background-size: 400%;
+    animation: slideBackground 60s linear infinite;
+    z-index: -1;
+}
+
+.logincontainer {
+    background-color: grey;
+}
+
+@keyframes slideBackground {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .loginBackground {
+        background-size: 300%;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .loginBackground {
+        background-size: 200%;
+    }
+}
+@media only screen and (min-width: 1500px) {
+    .loginBackground {
+        background-size: 140%;
+    }
+}
