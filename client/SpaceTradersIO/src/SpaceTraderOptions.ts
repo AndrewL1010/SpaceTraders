@@ -1,0 +1,9 @@
+
+const SpaceTraderOptions = {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWVyIjoiMTIzNDU2Nzg5MDEyMzQiLCJ2ZXJzaW9uIjoidjIiLCJyZXNldF9kYXRlIjoiMjAyMy0wOS0zMCIsImlhdCI6MTY5NjQwMjk0Niwic3ViIjoiYWdlbnQtdG9rZW4ifQ.uPX7pzJD_e0855sUApMCeredQHSW5peHCaBLkVxhh0Qzl3E4JZJDgRfu_KjbaQ_BDafsy0DMFfZDtcD1UttexiGOU1zpiMJABpn55jiSQs9GE3udhdVi5K0WviAfysAhn6pZ3CE4550TaEio2rVv2Mcf3uUyStLnHM0FbTlBSGFiVP0t_BWg9i32m0FBDDVvRDs2Vkh0FGfJQdxpPhrTkUfBSNZ3jHUbBafPTs2MjEXzO3Rg_f2qGy4XWk0HhuxA2bDWGUN6EY0yRerEsp6OJbX1e00yEueu7Bhf3juzPpvm9XaGwTM7LBWMCQ2kyCkQPf42AzQKUDNnd4fIzK-ZSQ'
+    },
+};
+
+export default SpaceTraderOptions;

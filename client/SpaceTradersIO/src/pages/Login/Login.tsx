@@ -2,19 +2,18 @@ import { Grid, Paper, Avatar, TextField, Button, createTheme, ThemeProvider, Cir
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import style from './Login.module.css'
 import { useState } from 'react';
-import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-
-
+import Box from '@mui/material/Box';
+import Cookies from 'js-cookie';
+import { useGlobalContext } from '../../contexts/PlayerInfoContext';
 function Login() {
     const [loading, setLoading] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
     const [regEmail, setRegEmail] = useState<string>("");
     const [regUsername, setRegUsername] = useState<string>("");
     const [access_token, setacesss_token] = useState<string>("");
-    const defaultHeaders = { "Content-Type": "application/json" };
     const [usernameError, setUsernameError] = useState<boolean>(false);
     const [usernameErrorMsg, setUsernameErrorMsg] = useState<string>("");
     const [loginError, setLoginError] = useState<boolean>(false);
@@ -24,6 +23,8 @@ function Login() {
 
     const [openRegister, setOpenRegister] = useState<boolean>(false);
     const [openMessage, setOpenMessage] = useState<boolean>(false);
+    const { setPlayerInfo } = useGlobalContext();
+    const defaultHeaders = { "Content-Type": "application/json" };
 
 
     const handleOpen = () => {
@@ -57,11 +58,14 @@ function Login() {
                 username: username,
                 access_token: access_token,
             }
-            const response = await fetch("http://localhost:5000/login",
+            const response = await fetch("https://localhost:5000/login",
                 {
                     method: "POST",
                     headers: defaultHeaders,
                     body: JSON.stringify(data),
+                    mode: "cors",
+                    credentials: "include",
+
 
                 }
             )
@@ -69,6 +73,21 @@ function Login() {
                 setLoginError(true);
             }
             else {
+                try {
+                    const options = {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${Cookies.get("access_token")}`
+                        },
+                    };
+                    const playerResponse = await fetch('https://api.spacetraders.io/v2/my/agent', options);
+                    const playerResult = await playerResponse.json();
+                    const PlayerInfo = playerResult.data;
+                    setPlayerInfo(PlayerInfo);
+                }
+                catch (e) {
+                    console.log(e);
+                }
                 navigate("/Dashboard");
             }
         }
@@ -104,16 +123,15 @@ function Login() {
                 }
 
             }
+        
             else {
                 setUsernameError(false);
-                setacesss_token(SpaceTradersResult.data.token);
-
                 const account_data = {
                     username: regUsername,
                     email: regEmail,
-                    access_token: access_token
+                    access_token: SpaceTradersResult.data.token
                 }
-                const response = await fetch("http://localhost:5000/register",
+                const response = await fetch("https://localhost:5000/register",
                     {
                         method: "POST",
                         headers: defaultHeaders,
