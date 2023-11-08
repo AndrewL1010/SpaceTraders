@@ -10,38 +10,49 @@ import { GlobalPlayerInfoContextProvider } from './contexts/PlayerInfoContext.ts
 import Contracts from './pages/Contracts/Contracts.tsx'
 import Shipyards from './pages/Shipyards/Shipyards.tsx'
 import Markets from './pages/Markets/Markets.tsx'
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage.tsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+
   },
   {
     path: "/dashboard",
-    element: <Dashboard />
+    element: <Dashboard />,
+
 
   },
   {
     path: "/systems",
     element: <Systems />,
+
   },
   {
     path: "/waypoints/:id",
-    element: <Waypoints />
+    element: <Waypoints />,
+
   },
   {
     path: "/contracts",
-    element: <Contracts />
+    element: <Contracts />,
   },
   {
     path: "/shipyards/:systemid/:waypointid",
-    element: <Shipyards/>
+    element: <Shipyards />,
+
   },
   {
     path: "/Markets/:systemid/:waypointid",
-    element: <Markets/>
+    element: <Markets />,
+
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   }
-  
+
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

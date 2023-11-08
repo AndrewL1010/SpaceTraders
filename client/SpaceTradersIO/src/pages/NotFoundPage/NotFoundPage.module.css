@@ -1,0 +1,11 @@
+.span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(0, 89, 255);
+    cursor: pointer;
+}
+
+.span:hover {
+    text-decoration: underline;
+}

@@ -58,6 +58,20 @@ function Waypoints() {
   const { id } = useParams();
   const [numberOfPages, setNumberOfPages] = useState<number>(0);
   useEffect(() => {
+    const auth = async () => {
+      setLoading(true);
+      const response = await fetch("https://localhost:5000/auth",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          mode: "cors",
+          credentials: "include",
+        }
+      )
+      if (response.status !== 201) {
+        navigate("/");
+      }
+    }
     const getWaypoints = async () => {
       const options = {
         headers: {
@@ -82,6 +96,7 @@ function Waypoints() {
       }
       setLoading(false);
     }
+    auth();
     if (Cookies.get("access_token") !== undefined) {
       getWaypoints();
     }

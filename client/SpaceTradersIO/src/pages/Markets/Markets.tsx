@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import styles from './Markets.module.css'
 import { useGlobalContext } from '../../contexts/PlayerInfoContext';
-
+import { useNavigate } from 'react-router-dom';
 interface CargoInventory {
   symbol: string,
   name: string,
@@ -106,10 +106,24 @@ function Markets() {
   const [modalShip, setModalShip] = useState<{ shipSymbol: string, item: CargoInventory }>();
   const [showModalShip, setShowModalShip] = useState<boolean>(false);
 
-
+  const navigate = useNavigate();
 
 
   useEffect(() => {
+    const auth = async () => {
+      setLoading(true);
+      const response = await fetch("https://localhost:5000/auth",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          mode: "cors",
+          credentials: "include",
+        }
+      )
+      if (response.status !== 201) {
+        navigate("/");
+      }
+    }
     const getMarket = async () => {
       const options = {
         headers: {
@@ -169,7 +183,7 @@ function Markets() {
       }
       setLoading(false);
     }
-
+    auth();
     if (Cookies.get("access_token") !== undefined) {
       getMarket();
       getShipInfo();

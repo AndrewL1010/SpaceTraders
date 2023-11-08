@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import styles from './Shipyards.module.css'
 import { useParams } from 'react-router-dom';
 import PurchaseButton from './PurchaseButton';
+import { useNavigate } from 'react-router-dom';
 
 
 export interface Ship {
@@ -31,9 +32,24 @@ function Shipyards() {
     const [ships, setShips] = useState<Ship[] | undefined>()
     const [loading, setLoading] = useState<boolean>(true);
     const { systemid, waypointid } = useParams();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
+        const auth = async () => {
+            setLoading(true);
+            const response = await fetch("https://localhost:5000/auth",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    mode: "cors",
+                    credentials: "include",
+                }
+            )
+            if (response.status !== 201) {
+                navigate("/");
+            }
+        }
         const getShips = async () => {
             const options = {
                 headers: {
@@ -52,7 +68,7 @@ function Shipyards() {
                         purchasePrice: ship.purchasePrice,
                         waypointSymbol: waypointid,
                         modules: ship.modules.map((module) => {
-                            return {symbol: module.symbol, name: module.name}
+                            return { symbol: module.symbol, name: module.name }
                         })
                     }
                 })
@@ -60,6 +76,7 @@ function Shipyards() {
             }
             setLoading(false);
         }
+        auth();
         if (Cookies.get("access_token") !== undefined && systemid !== undefined && waypointid !== undefined) {
             getShips();
         }

@@ -40,6 +40,20 @@ function Systems() {
 
 
   useEffect(() => {
+    const auth = async () => {
+      setLoading(true);
+      const response = await fetch("https://localhost:5000/auth",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          mode: "cors",
+          credentials: "include",
+        }
+      )
+      if (response.status !== 201) {
+        navigate("/");
+      }
+    }
     const getSystems = async () => {
       const options = {
         headers: {
@@ -64,6 +78,7 @@ function Systems() {
       }
       setLoading(false);
     }
+    auth();
     if (Cookies.get("access_token") !== undefined) {
       getSystems();
     }

@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import styles from './Contracts.module.css'
 import { useGlobalContext } from '../../contexts/PlayerInfoContext';
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 interface ContractInfo {
     id: string;
     factionSymbol: string;
@@ -74,7 +75,23 @@ function Contracts() {
     const [chosenShip, setChosenShip] = useState<Ship>();
     const [amount, setAmount] = useState<number>(0);
     const [chosenContract, setChosenContract] = useState<ContractInfo>()
+
+    const navigate = useNavigate();
     useEffect(() => {
+        const auth = async () => {
+            setLoading(true);
+            const response = await fetch("https://localhost:5000/auth",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    mode: "cors",
+                    credentials: "include",
+                }
+            )
+            if (response.status !== 201) {
+                navigate("/");
+            }
+        }
         const getContract = async () => {
             const options = {
                 headers: {
@@ -91,6 +108,7 @@ function Contracts() {
             }
 
         }
+        auth();
         if (Cookies.get("access_token") !== undefined) {
             getContract();
         }
