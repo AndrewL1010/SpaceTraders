@@ -1,4 +1,3 @@
-import React from 'react'
 import Countdown from 'react-countdown';
 interface ArrivalCountDownProps {
     arrivalDateString: string

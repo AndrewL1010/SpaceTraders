@@ -177,6 +177,7 @@ function Waypoints() {
 
   }
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    console.log(event);
     localStorage.setItem("last-waypoints-page", page.toString());
     setCurrentPage(page);
   }

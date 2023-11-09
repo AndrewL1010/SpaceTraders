@@ -113,7 +113,7 @@ function Contracts() {
             getContract();
         }
 
-    }, [])
+    }, [navigate])
 
 
 

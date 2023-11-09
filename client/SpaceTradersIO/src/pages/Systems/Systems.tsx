@@ -83,7 +83,7 @@ function Systems() {
       getSystems();
     }
 
-  }, [currentPage])
+  }, [currentPage, navigate])
 
   const redirect = (symbolID: string) => {
     localStorage.removeItem("last-waypoints-page");
@@ -98,6 +98,7 @@ function Systems() {
     }
   })
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    console.log(event);
     localStorage.setItem("last-systems-page", page.toString())
     setCurrentPage(page);
   }

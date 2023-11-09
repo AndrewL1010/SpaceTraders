@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Modal, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Ship } from './Shipyards';
 import { useGlobalContext } from '../../contexts/PlayerInfoContext';
 import Cookies from 'js-cookie';
@@ -57,7 +57,7 @@ function PurchaseButton(props: Props) {
                 setTitle("Success");
                 setBody(`You have Successfully purchased ${ship.type}`);
                 setShowMessage(true);
-                const updatedPlayerInfo = {...playerInfo, credits: playerInfo.credits - ship.purchasePrice, shipCount: playerInfo.shipCount + 1};
+                const updatedPlayerInfo = { ...playerInfo, credits: playerInfo.credits - ship.purchasePrice, shipCount: playerInfo.shipCount + 1 };
                 setPlayerInfo(updatedPlayerInfo);
             }
         }

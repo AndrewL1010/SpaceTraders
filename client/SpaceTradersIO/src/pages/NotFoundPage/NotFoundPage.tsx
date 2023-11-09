@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../Components/Navbar';
 import styles from './NotFoundPage.module.css'
@@ -25,7 +25,7 @@ function NotFoundPage() {
         <div>
             <Navbar />
             <h2>This Page Does Not Exist <br /></h2>
-            <h2 onClick={() => {navigate("/Dashboard")}} className={styles.span}>Back To DashBoard</h2>
+            <h2 onClick={() => { navigate("/Dashboard") }} className={styles.span}>Back To DashBoard</h2>
         </div>
     )
 }

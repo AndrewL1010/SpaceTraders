@@ -189,7 +189,7 @@ function Markets() {
       getShipInfo();
     }
 
-  }, [systemid, waypointid])
+  }, [systemid, waypointid, navigate])
 
 
   const submitPurchase = async () => {

@@ -81,7 +81,7 @@ function Shipyards() {
             getShips();
         }
 
-    }, [systemid, waypointid])
+    }, [systemid, waypointid, navigate])
 
 
     const theme = createTheme({
