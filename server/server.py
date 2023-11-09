@@ -56,7 +56,7 @@ class Users(db.Model):
     access_token = db.Column(db.String(255))
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login():
 
     data = request.get_json()
@@ -112,7 +112,7 @@ def login():
     return response
 
 
-@app.route("/register", methods=["POST"])
+@app.route("/api/register", methods=["POST"])
 def register():
     data = request.get_json()
     
@@ -192,7 +192,7 @@ def register():
 
 
 
-@app.route("/auth", methods=["POST"])
+@app.route("/api/auth", methods=["POST"])
 def auth():
 
     if "user_token" not in request.cookies:
@@ -211,7 +211,7 @@ def auth():
     return response
 
 
-@app.route("/logout", methods=["POST"])
+@app.route("/api/logout", methods=["POST"])
 def logout():
     print("hello")
     csrf_token_headers = request.headers.get("csrf-encoded-token")
