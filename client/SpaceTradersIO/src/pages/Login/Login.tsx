@@ -131,7 +131,7 @@ function Login() {
                     email: regEmail,
                     access_token: SpaceTradersResult.data.token
                 }
-                const response = await fetch("https://52.53.247.156/api/register",
+                const response = await fetch("http://52.53.247.156/api/register",
                     {
                         method: "POST",
                         headers: defaultHeaders,
