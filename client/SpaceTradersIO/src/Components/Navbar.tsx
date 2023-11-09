@@ -97,7 +97,7 @@ function Navbar() {
     })
 
     const logout = async () => {
-        const response = await fetch("https://localhost:5000/logout",
+        const response = await fetch("http://52.53.247.156/api/logout",
             {
                 method: "POST",
                 headers: {

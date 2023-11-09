@@ -58,7 +58,7 @@ function Login() {
                 username: username,
                 access_token: access_token,
             }
-            const response = await fetch("http://52.53.247.156:5000/api/login",
+            const response = await fetch("http://52.53.247.156/api/login",
                 {
                     method: "POST",
                     headers: defaultHeaders,

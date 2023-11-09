@@ -112,7 +112,7 @@ function Markets() {
   useEffect(() => {
     const auth = async () => {
       setLoading(true);
-      const response = await fetch("http://52.53.247.156:5000/api/auth",
+      const response = await fetch("http://52.53.247.156/api/auth",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
