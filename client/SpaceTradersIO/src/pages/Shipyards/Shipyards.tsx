@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Navbar from '../../Components/Navbar'
 import Cookies from 'js-cookie'
 import { createTheme, ThemeProvider, CircularProgress } from "@mui/material";
@@ -38,7 +38,7 @@ function Shipyards() {
     useEffect(() => {
         const auth = async () => {
             setLoading(true);
-            const response = await fetch("https://localhost:5000/auth",
+            const response = await fetch("http://52.53.247.156:5000/api/auth",
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
