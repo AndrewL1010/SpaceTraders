@@ -1,4 +1,5 @@
 import datetime
+import boto3
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
@@ -15,7 +16,19 @@ import jsonschema
 import requests
 import secrets
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:4739@localhost:5432/SpaceTraders'
+ssm = boto3.client('ssm', region_name='us-west-1')
+USER_SECRET_KEY = ssm.get_parameter(Name='/USER_SECRET_KEY', WithDecryption=True)['Parameter']['Value']
+HOST_EMAIL = ssm.get_parameter(Name='/HOST_EMAIL', WithDecryption=True)['Parameter']['Value']
+HOST_PASSWORD = ssm.get_parameter(Name='/HOST_PASSWORD', WithDecryption=True)['Parameter']['Value']
+CSRF_SECRET_KEY = ssm.get_parameter(Name='/CSRF_SECRET_KEY', WithDecryption=True)['Parameter']['Value']
+
+os.environ['USER_SECRET_KEY'] = USER_SECRET_KEY
+os.environ['HOST_EMAIL'] = HOST_EMAIL
+os.environ['HOST_PASSWORD'] = HOST_PASSWORD
+os.environ['CSRF_SECRET_KEY'] = CSRF_SECRET_KEY
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@spacetraders-database.cg8ga8pxb3sf.us-west-1.rds.amazonaws.com:5432/SpaceTraders'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
@@ -31,6 +44,8 @@ SSLify = SSLify(app)
 
 cert_path = 'flask-cert.pem'
 key_path = 'flask-key.pem'
+
+
 
 
 
