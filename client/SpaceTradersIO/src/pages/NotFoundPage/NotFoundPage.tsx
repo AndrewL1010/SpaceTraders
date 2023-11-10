@@ -6,7 +6,7 @@ function NotFoundPage() {
     const navigate = useNavigate();
     useEffect(() => {
         const auth = async () => {
-            const response = await fetch("http://52.53.247.156/api/auth",
+            const response = await fetch("https://andrewlu.ca/api/auth",
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

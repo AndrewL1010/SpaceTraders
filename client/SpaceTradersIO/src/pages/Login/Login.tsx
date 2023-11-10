@@ -58,7 +58,7 @@ function Login() {
                 username: username,
                 access_token: access_token,
             }
-            const response = await fetch("http://52.53.247.156/api/login",
+            const response = await fetch("https://andrewlu.ca/api/login",
                 {
                     method: "POST",
                     headers: defaultHeaders,
@@ -131,7 +131,7 @@ function Login() {
                     email: regEmail,
                     access_token: SpaceTradersResult.data.token
                 }
-                const response = await fetch("http://52.53.247.156/api/register",
+                const response = await fetch("https://andrewlu.ca/api/register",
                     {
                         method: "POST",
                         headers: defaultHeaders,

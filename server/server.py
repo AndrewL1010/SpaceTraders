@@ -108,7 +108,6 @@ def login():
         print(e)
         response = make_response(jsonify({"message": "an error has occured on the server side"}), 500)
 
-
     return response
 
 

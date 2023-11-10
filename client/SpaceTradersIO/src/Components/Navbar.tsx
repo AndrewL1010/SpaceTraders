@@ -97,7 +97,7 @@ function Navbar() {
     })
 
     const logout = async () => {
-        const response = await fetch("http://52.53.247.156/api/logout",
+        const response = await fetch("https://andrewlu.ca/api/logout",
             {
                 method: "POST",
                 headers: {
