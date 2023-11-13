@@ -57,6 +57,7 @@ function Waypoints() {
   const [body, setBody] = useState<string>("");
   const { id } = useParams();
   const [numberOfPages, setNumberOfPages] = useState<number>(0);
+  const [travelLoading, setTravelLoading] = useState<boolean>(false);
   useEffect(() => {
     const auth = async () => {
       setLoading(true);
@@ -101,7 +102,7 @@ function Waypoints() {
       getWaypoints();
     }
 
-  }, [id, currentPage])
+  }, [id, currentPage, navigate])
 
   const theme = createTheme({
     palette: {
@@ -144,6 +145,7 @@ function Waypoints() {
     setAction((event.target as HTMLInputElement).value);
   };
   const Navigate = async (ShipID: string, action: string) => {
+    setTravelLoading(true);
     const options = {
       method: 'POST',
       headers: {
@@ -173,7 +175,9 @@ function Waypoints() {
       setBody(`You have consumed ${result.data.fuel.consumed.amount} fuel and have ${result.data.fuel.current} fuel left. You will arrive at ${result.data.nav.route.destination.symbol} in ${minutes} minutes ${seconds} seconds.`);
       setShowMessage(true);
     }
+    setTravelLoading(false);
     setShowShipOptions(false);
+
 
   }
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
@@ -348,7 +352,7 @@ function Waypoints() {
                         </RadioGroup>
                       </div>
                     </FormControl>
-                    <Button onClick={() => { Navigate(shipID, action) }}> Travel Now</Button>
+                    <Button onClick={() => { Navigate(shipID, action) }}> {travelLoading ? <CircularProgress /> : "Travel Now"}</Button>
                   </Box>
                 </Box>
               </Modal>

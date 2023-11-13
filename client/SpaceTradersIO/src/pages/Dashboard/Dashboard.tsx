@@ -103,6 +103,9 @@ function Dashboard() {
   const navigate = useNavigate();
   const { playerInfo, setPlayerInfo } = useGlobalContext();
   const [currentModalTraits, setCurrentModalTrait] = useState<trait[]>([])
+  const [refuelLoading, setRefuelLoading] = useState<boolean>(false);
+  const [extractLoading, setExtractLoading] = useState<boolean>(false);
+  const [dockLoading, setDockLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const auth = async () => {
@@ -205,6 +208,7 @@ function Dashboard() {
   })
 
   const handleDocking = async (shipSymbol: string, action: string) => {
+    setDockLoading(true);
     const options = {
       method: 'POST',
       headers: {
@@ -231,8 +235,10 @@ function Dashboard() {
       setBody(result.error.message);
       setShowMessage(true);
     }
+    setDockLoading(false);
   }
   const handleRefuel = async (shipSymbol: string) => {
+    setRefuelLoading(true);
     const options = {
       method: 'POST',
       headers: {
@@ -271,8 +277,10 @@ function Dashboard() {
         setShowMessage(true);
       }
     }
+    setRefuelLoading(false);
   }
   const extract = async (shipSymbol: string) => {
+    setExtractLoading(true);
     const options = {
       method: 'POST',
       headers: {
@@ -302,6 +310,7 @@ function Dashboard() {
       setBody(`You have extracted ${result.data.extraction.yield.units} ${result.data.extraction.yield.symbol}`);
       setShowMessage(true)
     }
+    setExtractLoading(false);
   }
   const handleShipWaypoint = (traits: trait[], waypoint: string, system: string, type: string) => {
     setCurrentModalTrait(traits);
@@ -311,7 +320,7 @@ function Dashboard() {
     setShowtraits(true);
 
   }
- 
+
 
   return (
     <>
@@ -457,21 +466,21 @@ function Dashboard() {
                       {ship.nav.status === "DOCKED" ?
                         (
 
-                          <Button onClick={() => { handleDocking(ship.cooldown.shipSymbol, "undock") }}>Undock</Button>
+                          <Button onClick={() => { handleDocking(ship.cooldown.shipSymbol, "undock") }}>{dockLoading ? <CircularProgress /> : "Undock"}</Button>
 
 
                         )
                         :
                         (
                           <>
-                            <Button onClick={() => { handleDocking(ship.cooldown.shipSymbol, "dock") }}>Dock</Button>
-                            <Button onClick={() => { extract(ship.cooldown.shipSymbol) }}>Extract</Button>
+                            <Button onClick={() => { handleDocking(ship.cooldown.shipSymbol, "dock") }}>{dockLoading ? <CircularProgress /> : "Dock"}</Button>
+                            <Button onClick={() => { extract(ship.cooldown.shipSymbol) }}>{extractLoading ? <CircularProgress /> : "Extract"}</Button>
                           </>
                         )
 
                       }
 
-                      <Button onClick={() => { handleRefuel(ship.cooldown.shipSymbol) }}>Refuel</Button>
+                      <Button onClick={() => { handleRefuel(ship.cooldown.shipSymbol) }}>{refuelLoading ? <CircularProgress /> : "Refuel"}</Button>
 
                     </div>
                   </div>

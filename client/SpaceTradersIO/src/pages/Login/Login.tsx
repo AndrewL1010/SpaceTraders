@@ -20,6 +20,7 @@ function Login() {
     const [modalTitle, setModalTitle] = useState<string>("");
     const [modalBody, setModalBody] = useState<string>("");
     const navigate = useNavigate();
+    const [loginLoading, setLoginLoading] = useState<boolean>(false);
 
     const [openRegister, setOpenRegister] = useState<boolean>(false);
     const [openMessage, setOpenMessage] = useState<boolean>(false);
@@ -53,6 +54,7 @@ function Login() {
 
 
     const login = async () => {
+        setLoginLoading(true);
         try {
             const data = {
                 username: username,
@@ -94,6 +96,7 @@ function Login() {
         catch (e) {
             console.log(e);
         }
+        setLoginLoading(false);
 
     }
 
@@ -188,7 +191,7 @@ function Login() {
                     </Grid>
                     <TextField helperText={loginError ? "Incorrect username or password" : ""} error={loginError} onChange={(e) => { setUsername(e.target.value); setLoginError(false) }} className={style.textfield} label="username" placeholder="Enter Username..." inputProps={propColor} InputLabelProps={propColor} />
                     <TextField type='password' onChange={(e) => { setacesss_token(e.target.value); setLoginError(false) }} className={style.textfield} label="token" placeholder="Enter Access Token..." inputProps={propColor} InputLabelProps={propColor} />
-                    <Button onClick={login} color='primary' >Login</Button>
+                    <Button onClick={login} color='primary' >{loginLoading ? <CircularProgress/> : "Login"}</Button>
                     <Button onClick={handleOpen}>Register</Button>
                 </Paper>
             </Grid>
