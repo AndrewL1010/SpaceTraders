@@ -112,6 +112,7 @@ function Contracts() {
         if (Cookies.get("access_token") !== undefined) {
             getContract();
         }
+        setLoading(false);
 
     }, [navigate])
 
