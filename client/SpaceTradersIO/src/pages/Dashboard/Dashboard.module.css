@@ -30,6 +30,9 @@
     /* Opera < 12.1 */
     animation: fadein 2s;
 }
+.modalWidth{
+    width: 300px;
+}
 
 .ship_waypoints {
     color: blue;
@@ -94,4 +97,9 @@
 
 .currentsystem:hover {
     text-decoration: underline;
+}
+@media only screen and (min-width: 600px) {
+    .modalWidth{
+        width: 600px;
+    }
 }

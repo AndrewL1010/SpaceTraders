@@ -78,7 +78,6 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 600,
   bgcolor: '#2a2a2a',
   border: '2px solid #FFA500',
   boxShadow: 24,
@@ -495,7 +494,7 @@ function Dashboard() {
                 onClose={() => { setShowMessage(false) }}
 
               >
-                <Box sx={{ ...modalStyle, margin: "0" }}>
+                <Box className={styles.modalWidth} sx={{ ...modalStyle, margin: "0" }}>
                   <Typography id="modal-modal-title" variant="h5" component="h2">
                     {title}
                   </Typography>
@@ -513,7 +512,7 @@ function Dashboard() {
                 onClose={() => { setShowtraits(false) }}
 
               >
-                <Box sx={{ ...modalStyle, margin: "0" }}>
+                <Box className={styles.modalWidth} sx={{ ...modalStyle, margin: "0" }}>
                   <Typography id="modal-modal-title" variant="h5" component="h2">
                     {traitWaypoint}
                   </Typography>

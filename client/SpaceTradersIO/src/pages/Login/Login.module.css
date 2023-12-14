@@ -17,12 +17,21 @@ h2 {
     color: orange;
 }
 
-.paper {
+.loginBox {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    padding: 20px;
+    height: 55vh;
+    width: 280px;
+    margin: 20px auto;
+    background-color: #2a2a2a;
+    gap: 1.8rem;
 }
+.modalBox{
+    width: 300px;
+}
+
 
 .textfield:hover {
     border-color: white;
@@ -66,6 +75,12 @@ h1 {
     .loginBackground {
         background-size: 300%;
     }
+    .loginBox{
+        height: 45vh;
+    }
+    .modalBox{
+        width: 450px;
+    }
 }
 
 @media only screen and (min-width: 1000px) {
@@ -73,6 +88,7 @@ h1 {
         background-size: 200%;
     }
 }
+
 @media only screen and (min-width: 1500px) {
     .loginBackground {
         background-size: 140%;

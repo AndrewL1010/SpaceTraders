@@ -311,7 +311,7 @@ function Waypoints() {
                 onClose={() => { setShowShipOptions(false) }}
 
               >
-                <Box sx={{ ...modalStyle }}>
+                <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
                   <Typography id="modal-modal-title" variant="h5" component="h2">
                     Pick a ship to travel to {waypointID}
                   </Typography>
@@ -361,7 +361,7 @@ function Waypoints() {
                 onClose={() => { setShowMessage(false) }}
 
               >
-                <Box sx={{ ...modalStyle }}>
+                <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
                   <Typography id="modal-modal-title" variant="h5" component="h2">
                     {title}
                   </Typography>
@@ -375,7 +375,7 @@ function Waypoints() {
                 onClose={() => { setShowMessage(false) }}
 
               >
-                <Box sx={{ ...modalStyle }}>
+                <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
                   <Typography id="modal-modal-title" variant="h5" component="h2">
                     {title}
                   </Typography>

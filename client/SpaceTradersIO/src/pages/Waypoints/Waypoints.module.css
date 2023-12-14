@@ -42,16 +42,22 @@
     align-items: center;
     justify-content: center;
 }
-.parent{
+
+.parent {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.radioContainer{
+
+.radioContainer {
     display: flex;
     flex-direction: row;
     gap: 150px;
+}
+
+.modalWidth {
+    width: 300px;
 }
 
 
@@ -106,4 +112,10 @@
 
 .shipyards:hover {
     text-decoration: underline;
+}
+
+@media only screen and (min-width: 600px) {
+    .modalWidth {
+        width: 600px;
+    }
 }

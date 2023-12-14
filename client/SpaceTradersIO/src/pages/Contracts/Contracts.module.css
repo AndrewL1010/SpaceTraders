@@ -37,6 +37,9 @@
 .shipcargo:hover {
     background-color: #FF7E33;
 }
+.modalWidth{
+    width: 300px;
+}
 
 @keyframes fadein {
     from {
@@ -78,5 +81,11 @@
 
     to {
         opacity: 1;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .modalWidth{
+        width: 600px;
     }
 }

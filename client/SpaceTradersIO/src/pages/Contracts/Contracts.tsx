@@ -49,7 +49,6 @@ const modalStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 600,
     bgcolor: '#2a2a2a',
     border: '2px solid #FFA500',
     boxShadow: 24,
@@ -410,7 +409,7 @@ function Contracts() {
                             onClose={() => { setShowShipOptions(false) }}
 
                         >
-                            <Box sx={{ ...modalStyle }}>
+                            <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
                                 <Typography id="modal-modal-title" variant="h5" component="h2">
                                     Pick a ship to deliver goods
                                 </Typography>
@@ -450,7 +449,7 @@ function Contracts() {
                             onClose={() => { setShowShipInventory(false) }}
 
                         >
-                            <Box sx={{ ...modalStyle }}>
+                            <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
                                 <Typography id="modal-modal-title" variant="h5" component="h2">
                                     Contract Delivery
                                 </Typography>
@@ -618,7 +617,7 @@ function Contracts() {
                             onClose={() => { setShowMessage(false) }}
 
                         >
-                            <Box sx={{ ...modalStyle }}>
+                            <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
                                 <Typography id="modal-modal-title" variant="h5" component="h2">
                                     {title}
                                 </Typography>
