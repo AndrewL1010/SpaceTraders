@@ -51,7 +51,7 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://ddubg9e387ayr.cloudfront.net/space.jpg');
+    background-image: url('https://andrewlu.ca/space.jpg');
     background-size: 400%;
     animation: slideBackground 60s linear infinite;
     z-index: -1;
