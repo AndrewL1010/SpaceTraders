@@ -27,6 +27,10 @@ function Login() {
     const { setPlayerInfo } = useGlobalContext();
     const defaultHeaders = { "Content-Type": "application/json" };
 
+    interface LoginInfo {
+        username: string,
+        access_token: string,
+    }
 
     const handleOpen = () => {
         setOpenRegister(true);
@@ -51,6 +55,29 @@ function Login() {
         gap: 5,
     };
 
+    const authenticateLogin = async (data: LoginInfo) => {
+        return await fetch("https://andrewlu.ca/api/login",
+            {
+                method: "POST",
+                headers: defaultHeaders,
+                body: JSON.stringify(data),
+                mode: "cors",
+                credentials: "include",
+
+
+            });
+    }
+    const fetchPlayerInfo = async () => {
+        const options = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${Cookies.get("access_token")}`
+            },
+        };
+        const playerResponse = await fetch('https://api.spacetraders.io/v2/my/agent', options);
+        const playerResult = await playerResponse.json();
+        return playerResult.data;
+    }
 
     const login = async () => {
         setLoginLoading(true);
@@ -59,31 +86,13 @@ function Login() {
                 username: username,
                 access_token: access_token,
             }
-            const response = await fetch("https://andrewlu.ca/api/login",
-                {
-                    method: "POST",
-                    headers: defaultHeaders,
-                    body: JSON.stringify(data),
-                    mode: "cors",
-                    credentials: "include",
-
-
-                }
-            )
+            const response = await authenticateLogin(data);
             if (response.status === 401) {
                 setLoginError(true);
             }
             else {
                 try {
-                    const options = {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${Cookies.get("access_token")}`
-                        },
-                    };
-                    const playerResponse = await fetch('https://api.spacetraders.io/v2/my/agent', options);
-                    const playerResult = await playerResponse.json();
-                    const PlayerInfo = playerResult.data;
+                    const PlayerInfo = await fetchPlayerInfo();
                     setPlayerInfo(PlayerInfo);
                 }
                 catch (e) {
@@ -125,7 +134,7 @@ function Login() {
                 }
 
             }
-        
+
             else {
                 setUsernameError(false);
                 const account_data = {
@@ -189,7 +198,7 @@ function Login() {
                     </Grid>
                     <TextField helperText={loginError ? "Incorrect username or password" : ""} error={loginError} onChange={(e) => { setUsername(e.target.value); setLoginError(false) }} className={style.textfield} label="username" placeholder="Enter Username..." inputProps={propColor} InputLabelProps={propColor} />
                     <TextField type='password' onChange={(e) => { setacesss_token(e.target.value); setLoginError(false) }} className={style.textfield} label="token" placeholder="Enter Access Token..." inputProps={propColor} InputLabelProps={propColor} />
-                    <Button onClick={login} color='primary' >{loginLoading ? <CircularProgress/> : "Login"}</Button>
+                    <Button onClick={login} color='primary' >{loginLoading ? <CircularProgress /> : "Login"}</Button>
                     <Button onClick={handleOpen}>Register</Button>
                 </Box>
             </Grid>
