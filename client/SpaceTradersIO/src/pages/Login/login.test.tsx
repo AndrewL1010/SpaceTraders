@@ -6,14 +6,20 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter } from 'react-router-dom';
 import Login from './Login';
 
-const navigate = vi.fn()
-vi.mock('react-router-dom', async () => {
-    const actual = (await vi.importActual('react-router-dom')) as {}
+const mocks = vi.hoisted(() => {
     return {
-        ...actual,
-        useNavigate: () => navigate,
+        navigate: vi.fn(),
     }
 })
+vi.mock('react-router-dom', async (importOriginal) => {
+    const mod = await importOriginal<typeof import('react-router-dom')>()
+    return {
+        ...mod,
+        // replace some exports
+        useNavigate: () => mocks.navigate,
+    }
+})
+
 it("Should display login page", async () => {
 
     render(
@@ -45,10 +51,9 @@ it("Should Login and navigate to Dashboard page", async () => {
     fireEvent.click(screen.getByText("Login"));
 
     await waitFor(() => {
-        expect(mockedNavigate).toHaveBeenCalledWith("/Dashboard")
+        expect(mocks.navigate).toHaveBeenCalledWith("/Dashboard")
     });
 
 
 })
-
 
