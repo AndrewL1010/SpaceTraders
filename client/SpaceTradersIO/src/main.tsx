@@ -12,6 +12,7 @@ import Shipyards from './pages/Shipyards/Shipyards.tsx'
 import Markets from './pages/Markets/Markets.tsx'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage.tsx'
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
 
 ]);
 
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <GlobalPlayerInfoContextProvider>
@@ -62,3 +64,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </GlobalPlayerInfoContextProvider>
   </React.StrictMode>,
 );
+

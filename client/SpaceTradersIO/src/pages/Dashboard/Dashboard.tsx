@@ -118,6 +118,7 @@ function Dashboard() {
         }
       )
       if (response.status !== 201) {
+
         navigate("/");
       }
     }
@@ -196,6 +197,7 @@ function Dashboard() {
 
     auth();
     getShipInfo();
+    console.log("finished getting ship info");
   }, [navigate])
 
   const theme = createTheme({
@@ -581,7 +583,8 @@ function Dashboard() {
                 </Box>
               </Modal>
 
-            </div></>
+            </div>
+            </>
         ) : (
           <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}>{loading ? <CircularProgress /> : "No Owned Ships"}</h2>
         )

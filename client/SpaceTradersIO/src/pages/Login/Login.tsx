@@ -1,3 +1,4 @@
+
 import { Grid, Avatar, TextField, Button, createTheme, ThemeProvider, CircularProgress, Typography } from '@mui/material'
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import style from './Login.module.css'
@@ -70,11 +71,15 @@ function Login() {
 
                 }
             )
+    
             if (response.status === 401) {
+
+                console.log("login error");
                 setLoginError(true);
             }
             else {
                 try {
+                    
                     const options = {
                         headers: {
                             'Content-Type': 'application/json',
@@ -82,14 +87,19 @@ function Login() {
                         },
                     };
                     const playerResponse = await fetch('https://api.spacetraders.io/v2/my/agent', options);
+
                     const playerResult = await playerResponse.json();
                     const PlayerInfo = playerResult.data;
                     setPlayerInfo(PlayerInfo);
+            
                 }
                 catch (e) {
                     console.log(e);
                 }
+                console.log("navigating");
+                
                 navigate("/Dashboard");
+                console.log("navigated");
             }
         }
         catch (e) {
