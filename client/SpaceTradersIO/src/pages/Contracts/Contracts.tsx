@@ -79,7 +79,7 @@ function Contracts() {
     useEffect(() => {
         const auth = async () => {
             setLoading(true);
-            const response = await fetch("https://andrewlu.ca/api/auth",
+            const response = await fetch("/api/auth",
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -108,9 +108,8 @@ function Contracts() {
 
         }
         auth();
-        if (Cookies.get("access_token") !== undefined) {
-            getContract();
-        }
+        getContract();
+
         setLoading(false);
 
     }, [navigate])
@@ -146,8 +145,7 @@ function Contracts() {
                 contract.id === contractID ? { ...contract, accepted: true } : contract
             );
             setContracts(updatedContracts);
-            const updatedPlayerInfo = { ...playerInfo, credits: playerInfo.credits + result.data.terms.payment.onAccepted }
-            setPlayerInfo(updatedPlayerInfo);
+            setPlayerInfo(result.data.agent);
         }
         setLoading(false);
 
@@ -166,12 +164,7 @@ function Contracts() {
         const response = await fetch(url, options);
         const result = await response.json();
 
-        if (result.error !== undefined) {
-            setTitle("Error");
-            setBody(result.error.message);
-            setShowMessage(true);
-        }
-        else {
+        if (result.data !== undefined) {
             const updatedPlayerInfo = { ...playerInfo, credits: playerInfo.credits + result.data.contract.terms.payment.onFulfilled }
             setPlayerInfo(updatedPlayerInfo);
             const updatedContracts = contracts?.map((contract) => {
@@ -185,6 +178,12 @@ function Contracts() {
             setBody("You have fulfilled the contract");
             setShowMessage(true);
         }
+        else {
+            setTitle("Error");
+            setBody(result.error.message);
+            setShowMessage(true);
+        }
+
     }
     const deliverContract = async () => {
         const url = `https://api.spacetraders.io/v2/my/contracts/${chosenContract?.id}/deliver`;
@@ -389,13 +388,13 @@ function Contracts() {
                                                 </Table>
                                                 {contract.accepted ? (
                                                     <div className={styles.buttonContainer}>
-                                                        <Button onClick={() => { handleShowShips(contract) }} >Deliver</Button>
-                                                        <Button onClick={() => { fulfilContract(contract.id) }}>Fulfil</Button>
+                                                        <Button data-testid={`contract-deliver-${contract.id}`} onClick={() => { handleShowShips(contract) }} >Deliver</Button>
+                                                        <Button data-testid={`contract-fulfill-${contract.id}`} onClick={() => { fulfilContract(contract.id) }}>Fulfil</Button>
                                                     </div>
                                                 )
 
 
-                                                    : <Button onClick={() => { acceptContract(contract.id) }}>{loading ? <CircularProgress /> : "Accept"}</Button>}
+                                                    : <Button data-testid="contract-accept-button" onClick={() => { acceptContract(contract.id) }}>{loading ? <CircularProgress size="1rem" /> : "Accept"}</Button>}
 
                                             </div>
                                         )
@@ -426,7 +425,7 @@ function Contracts() {
                                                 <h3>Your Ships</h3>
                                                 {availableShips.length > 0 ? (
                                                     availableShips.map((ship) => (
-                                                        <FormControlLabel key={ship} value={ship} control={<Radio sx={{ color: "orange" }} />} label={ship} />
+                                                        <FormControlLabel data-testid={`deliver-ship-${ship}`} key={ship} value={ship} control={<Radio sx={{ color: "orange" }} />} label={ship} />
                                                     ))
                                                 )
                                                     :
@@ -440,7 +439,7 @@ function Contracts() {
 
                                         </div>
                                     </FormControl>
-                                    <Button onClick={() => { handleShipInventory(shipID) }}> Choose Ship</Button>
+                                    <Button data-testid="choose-ship-button" onClick={() => { handleShipInventory(shipID) }}> Choose Ship</Button>
                                 </Box>
                             </Box>
                         </Modal>
@@ -580,7 +579,7 @@ function Contracts() {
                                         <TableBody>
                                             {chosenShip.inventory.map((item) => (
 
-                                                <TableRow key={item.symbol} className={styles.shipcargo} onClick={() => { setDeliveryItem(item.symbol) }}>
+                                                <TableRow data-testid={`deliver-item-${item.symbol}`} key={item.symbol} className={styles.shipcargo} onClick={() => { setDeliveryItem(item.symbol) }}>
                                                     <TableCell
                                                         component="th"
                                                         scope="row"
@@ -605,7 +604,7 @@ function Contracts() {
                                 }
                                 <h3 style={{ color: "orange", textAlign: "center", margin: "0" }}>{deliveryItem !== undefined ? `How many ${deliveryItem} do you want to deliver?` : "Choose an Item to deliver"}</h3>
                                 {deliveryItem !== undefined ? (
-                                    <TextField onChange={handleAmountChange} inputProps={{ style: { color: "orange" } }} InputLabelProps={{ style: { color: "orange" } }} className={styles.inputs} type='number' label={"Amount"} variant="outlined" size='small' value={amount} />
+                                    <TextField onChange={handleAmountChange} inputProps={{ style: { color: "orange" }, 'data-testid': 'deliver-amount-input' }} InputLabelProps={{ style: { color: "orange" } }} className={styles.inputs} type='number' label="Amount" variant="outlined" size='small' value={amount} />
                                 ) : null
 
                                 }

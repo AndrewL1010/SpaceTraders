@@ -61,7 +61,7 @@ function Waypoints() {
   useEffect(() => {
     const auth = async () => {
       setLoading(true);
-      const response = await fetch("https://andrewlu.ca/api/auth",
+      const response = await fetch("/api/auth",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -98,9 +98,8 @@ function Waypoints() {
       setLoading(false);
     }
     auth();
-    if (Cookies.get("access_token") !== undefined) {
-      getWaypoints();
-    }
+    getWaypoints();
+
 
   }, [id, currentPage, navigate])
 
@@ -170,7 +169,6 @@ function Waypoints() {
       const timeLeft = arrivalDate.getTime() - currentDate.getTime();
       const minutes = Math.floor(timeLeft / (1000 * 60));
       const seconds = Math.floor((timeLeft / 1000) % 60);
-
       setTitle("Ship Currently In Transit");
       setBody(`You have consumed ${result.data.fuel.consumed.amount} fuel and have ${result.data.fuel.current} fuel left. You will arrive at ${result.data.nav.route.destination.symbol} in ${minutes} minutes ${seconds} seconds.`);
       setShowMessage(true);
@@ -181,7 +179,6 @@ function Waypoints() {
 
   }
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    console.log(event);
     localStorage.setItem("last-waypoints-page", page.toString());
     setCurrentPage(page);
   }
@@ -190,10 +187,11 @@ function Waypoints() {
   return (
     <>
       <Navbar />
+      <Button data-testid='waypointsbuttontest'>vitest</Button>
       <ThemeProvider theme={theme}>
         {waypoints !== undefined && waypoints.length > 0 ? (
           <div className={styles.parent}>
-            <h2 className={styles.title}>Wayoints In System {id}</h2>
+            <h2 className={styles.title}>Waypoints In System {id}</h2>
             <div className={styles.container}>
               {
                 waypoints.map((waypoint) => (
@@ -299,7 +297,7 @@ function Waypoints() {
                       </TableBody>
 
                     </Table>
-                    <Button onClick={() => { ShowShipOptions(waypoint.symbol) }}>Travel</Button>
+                    <Button data-testid={`test-travel-${waypoint.symbol}`} onClick={() => { ShowShipOptions(waypoint.symbol) }}>Travel</Button>
                   </div>
 
                 ))
@@ -334,7 +332,7 @@ function Waypoints() {
                             :
                             (
                               <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
-                                {shipLoading ? <CircularProgress /> : "No Available Ships"}
+                                {shipLoading ? <CircularProgress size="1rem" /> : "No Available Ships"}
                               </Typography>
                             )
                           }
@@ -348,11 +346,11 @@ function Waypoints() {
                         >
                           <h3>Form of Travel</h3>
                           <FormControlLabel value={"warp"} control={<Radio sx={{ color: "orange" }} />} label={"Warp"} />
-                          <FormControlLabel value={"navigate"} control={<Radio sx={{ color: "orange" }} />} label={"Travel"} />
+                          <FormControlLabel data-testid='test-waypoint-travel' value={"navigate"} control={<Radio sx={{ color: "orange" }} />} label={"Travel"} />
                         </RadioGroup>
                       </div>
                     </FormControl>
-                    <Button onClick={() => { Navigate(shipID, action) }}> {travelLoading ? <CircularProgress /> : "Travel Now"}</Button>
+                    <Button data-testid='test-waypoint-travel-button' onClick={() => { Navigate(shipID, action) }}> {travelLoading ? <CircularProgress size="1rem" /> : "Travel Now"}</Button>
                   </Box>
                 </Box>
               </Modal>
@@ -362,24 +360,10 @@ function Waypoints() {
 
               >
                 <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
-                  <Typography id="modal-modal-title" variant="h5" component="h2">
+                  <Typography data-testid='test-title' id="modal-modal-title" variant="h5" component="h2">
                     {title}
                   </Typography>
-                  <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
-                    {body}
-                  </Typography>
-                </Box>
-              </Modal>
-              <Modal
-                open={showMessage}
-                onClose={() => { setShowMessage(false) }}
-
-              >
-                <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
-                  <Typography id="modal-modal-title" variant="h5" component="h2">
-                    {title}
-                  </Typography>
-                  <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
+                  <Typography data-testid="test-body" id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
                     {body}
                   </Typography>
                 </Box>
@@ -404,7 +388,7 @@ function Waypoints() {
             />
           </div>
         ) : (
-          <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}> {loading ? <CircularProgress /> : "No Available Waypoints"}</h2>
+          <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}> {loading ? <CircularProgress size="1rem" /> : "No Available Waypoints"}</h2>
         )
 
         }

@@ -9,8 +9,8 @@ function CountdownTimer(props: ArrivalCountDownProps) {
     const countdowntime = arrivalDate.getTime() - currentDate.getTime();
     if (countdowntime > 0) {
         return (
-            <Countdown date={Date.now() + countdowntime}>
-                <span>N/A</span>
+            <Countdown  date={Date.now() + countdowntime}>
+                <span data-testid="countdown-test">N/A</span>
             </Countdown>
         )
     }

@@ -1,3 +1,4 @@
+
 import { Grid, Avatar, TextField, Button, createTheme, ThemeProvider, CircularProgress, Typography } from '@mui/material'
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import style from './Login.module.css'
@@ -88,16 +89,19 @@ function Login() {
             }
             const response = await authenticateLogin(data);
             if (response.status === 401) {
+
                 setLoginError(true);
             }
             else {
                 try {
                     const PlayerInfo = await fetchPlayerInfo();
                     setPlayerInfo(PlayerInfo);
+
                 }
                 catch (e) {
                     console.log(e);
                 }
+
                 navigate("/Dashboard");
             }
         }
@@ -115,7 +119,6 @@ function Login() {
                 symbol: regUsername,
                 faction: "COSMIC",
             }
-
             const SpaceTradersResponse = await fetch("https://api.spacetraders.io/v2/register",
                 {
                     method: "POST",
@@ -142,7 +145,7 @@ function Login() {
                     email: regEmail,
                     access_token: SpaceTradersResult.data.token
                 }
-                const response = await fetch("https://andrewlu.ca/api/register",
+                const response = await fetch("/api/register",
                     {
                         method: "POST",
                         headers: defaultHeaders,
@@ -198,7 +201,7 @@ function Login() {
                     </Grid>
                     <TextField helperText={loginError ? "Incorrect username or password" : ""} error={loginError} onChange={(e) => { setUsername(e.target.value); setLoginError(false) }} className={style.textfield} label="username" placeholder="Enter Username..." inputProps={propColor} InputLabelProps={propColor} />
                     <TextField type='password' onChange={(e) => { setacesss_token(e.target.value); setLoginError(false) }} className={style.textfield} label="token" placeholder="Enter Access Token..." inputProps={propColor} InputLabelProps={propColor} />
-                    <Button onClick={login} color='primary' >{loginLoading ? <CircularProgress /> : "Login"}</Button>
+                    <Button onClick={login} color='primary' >{loginLoading ? <CircularProgress size="1rem" /> : "Login"}</Button>
                     <Button onClick={handleOpen}>Register</Button>
                 </Box>
             </Grid>
@@ -209,8 +212,8 @@ function Login() {
                 >
                     <Box sx={{ ...modalStyle, width: 280, height: 400 }}>
                         <h2>Create An Account"</h2>
-                        <TextField required helperText={!regUsername ? "Username is required" : "" || usernameError ? usernameErrorMsg : ""} error={usernameError || !regUsername} onChange={(e) => { setRegUsername(e.target.value) }} className={style.textfield} label="username" placeholder="Enter Username..." inputProps={propColor} InputLabelProps={propColor} />
-                        <TextField required helperText={!regEmail ? "Email is required" : ""} error={!regEmail} onChange={(e) => { setRegEmail(e.target.value) }} className={style.textfield} label="email" placeholder="Enter Email..." inputProps={propColor} InputLabelProps={propColor} />
+                        <TextField required helperText={!regUsername ? "Username is required" : "" || usernameError ? usernameErrorMsg : ""} error={usernameError || !regUsername} onChange={(e) => { setRegUsername(e.target.value) }} className={style.textfield} label="username" placeholder="Enter Desired Username..." inputProps={propColor} InputLabelProps={propColor} data-testid='test-username-field' />
+                        <TextField required helperText={!regEmail ? "Email is required" : ""} error={!regEmail} onChange={(e) => { setRegEmail(e.target.value) }} className={style.textfield} label="email" placeholder="Enter Email..." inputProps={propColor} InputLabelProps={propColor} data-testid='test-email-field' />
                         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
                             <Button onClick={createAccount}>{loading ? <CircularProgress size="1rem" /> : "Create Account"}</Button>
                             <Button onClick={() => {
@@ -227,10 +230,10 @@ function Login() {
 
                 >
                     <Box className={style.modalBox} sx={{ ...modalStyle }}>
-                        <Typography id="modal-modal-title" variant="h5" component="h2">
+                        <Typography data-testid='register-modal-title' id="modal-modal-title" variant="h5" component="h2">
                             {modalTitle}
                         </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
+                        <Typography data-testid="register-modal-body" id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
                             {modalBody}
                         </Typography>
                     </Box>

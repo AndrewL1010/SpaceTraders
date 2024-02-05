@@ -109,7 +109,7 @@ function Dashboard() {
   useEffect(() => {
     const auth = async () => {
       setLoading(true);
-      const response = await fetch("https://andrewlu.ca/api/auth",
+      const response = await fetch("/api/auth",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -118,6 +118,7 @@ function Dashboard() {
         }
       )
       if (response.status !== 201) {
+
         navigate("/");
       }
     }
@@ -196,6 +197,7 @@ function Dashboard() {
 
     auth();
     getShipInfo();
+
   }, [navigate])
 
   const theme = createTheme({
@@ -265,6 +267,7 @@ function Dashboard() {
     }
     else {
       if (result.data.transaction.totalPrice === 0) {
+  
         setTitle("Error");
         setBody("Your fuel tank is already full");
         setShowMessage(true);
@@ -372,7 +375,7 @@ function Dashboard() {
                             status
                           </TableCell>
                           <TableCell align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
-                            {ship.nav.status === "DOCKED" ? (<span>{ship.nav.status} at <span className={styles.ship_waypoints} onClick={() => { handleShipWaypoint(ship.waypoint_traits, ship.nav.waypointSymbol, ship.nav.systemSymbol, ship.waypoint_type) }}>{ship.nav.waypointSymbol}</span></span>) : ship.nav.status}
+                            {ship.nav.status === "DOCKED" ? (<span>{ship.nav.status} at <span data-testid={`test-status-${ship.nav.waypointSymbol}`} className={styles.ship_waypoints} onClick={() => { handleShipWaypoint(ship.waypoint_traits, ship.nav.waypointSymbol, ship.nav.systemSymbol, ship.waypoint_type) }}>{ship.nav.waypointSymbol}</span></span>) : ship.nav.status}
                           </TableCell>
                         </TableRow>
                         <TableRow>
@@ -408,7 +411,7 @@ function Dashboard() {
                             Current System
                           </TableCell>
                           <TableCell align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
-                            <span className={styles.currentsystem} onClick={() => { navigate(`/Waypoints/${ship.nav.systemSymbol}`); }}>{ship.nav.systemSymbol}</span>
+                            <span data-testid={`ship-current-system-id ${ship.cooldown.shipSymbol}`} className={styles.currentsystem} onClick={() => { navigate(`/Waypoints/${ship.nav.systemSymbol}`); }}>{ship.nav.systemSymbol}</span>
                           </TableCell>
                         </TableRow>
                         <TableRow>
@@ -465,21 +468,21 @@ function Dashboard() {
                       {ship.nav.status === "DOCKED" ?
                         (
 
-                          <Button onClick={() => { handleDocking(ship.cooldown.shipSymbol, "undock") }}>{dockLoading ? <CircularProgress /> : "Undock"}</Button>
+                          <Button data-testid={`test-undock-${ship.cooldown.shipSymbol}`} onClick={() => { handleDocking(ship.cooldown.shipSymbol, "undock") }}>{dockLoading ? <CircularProgress size="1rem" /> : "Undock"}</Button>
 
 
                         )
                         :
                         (
                           <>
-                            <Button onClick={() => { handleDocking(ship.cooldown.shipSymbol, "dock") }}>{dockLoading ? <CircularProgress /> : "Dock"}</Button>
-                            <Button onClick={() => { extract(ship.cooldown.shipSymbol) }}>{extractLoading ? <CircularProgress /> : "Extract"}</Button>
+                            <Button data-testid={`test-dock-${ship.cooldown.shipSymbol}`} onClick={() => { handleDocking(ship.cooldown.shipSymbol, "dock") }}>{dockLoading ? <CircularProgress size="1rem" /> : "Dock"}</Button>
+                            <Button  data-testid={`test-extract-${ship.cooldown.shipSymbol}`} onClick={() => { extract(ship.cooldown.shipSymbol) }}>{extractLoading ? <CircularProgress size="1rem" /> : "Extract"}</Button>
                           </>
                         )
 
                       }
 
-                      <Button onClick={() => { handleRefuel(ship.cooldown.shipSymbol) }}>{refuelLoading ? <CircularProgress /> : "Refuel"}</Button>
+                      <Button data-testid={`test-refuel-${ship.cooldown.shipSymbol}`} onClick={() => { handleRefuel(ship.cooldown.shipSymbol) }}>{refuelLoading ? <CircularProgress size="1rem" /> : "Refuel"}</Button>
 
                     </div>
                   </div>
@@ -581,9 +584,10 @@ function Dashboard() {
                 </Box>
               </Modal>
 
-            </div></>
+            </div>
+          </>
         ) : (
-          <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}>{loading ? <CircularProgress /> : "No Owned Ships"}</h2>
+          <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}>{loading ? <CircularProgress size="1rem" /> : "No Owned Ships"}</h2>
         )
 
         }
