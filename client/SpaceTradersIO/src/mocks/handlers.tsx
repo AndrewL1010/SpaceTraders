@@ -1,5 +1,5 @@
 import { http, HttpResponse, PathParams } from 'msw';
-import * as MockData from './expectedData';
+import * as MockData from './ExpectedData';
 
 export const handlers = [
     http.post('/api/login', () => {
