@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from '../../Components/Navbar'
 import Cookies from 'js-cookie'
 import { createTheme, ThemeProvider, CircularProgress } from "@mui/material";
@@ -38,7 +38,7 @@ function Shipyards() {
     useEffect(() => {
         const auth = async () => {
             setLoading(true);
-            const response = await fetch("https://andrewlu.ca/api/auth",
+            const response = await fetch("/api/auth",
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -77,9 +77,8 @@ function Shipyards() {
             setLoading(false);
         }
         auth();
-        if (Cookies.get("access_token") !== undefined && systemid !== undefined && waypointid !== undefined) {
-            getShips();
-        }
+        getShips();
+
 
     }, [systemid, waypointid, navigate])
 
@@ -192,7 +191,7 @@ function Shipyards() {
 
                                         </Table>
 
-                                        <PurchaseButton ship={ship} />
+                                        <PurchaseButton ship={ship} systemid={systemid} waypointid={waypointid} setShips={setShips}/>
                                     </div>
 
 
@@ -204,7 +203,7 @@ function Shipyards() {
                         </div>
                     </>
                 ) : (
-                    <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}> {loading ? <CircularProgress /> : "No Available Ships"}</h2>
+                    <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}> {loading ? <CircularProgress size="1rem" /> : "No Available Ships"}</h2>
                 )
 
                 }

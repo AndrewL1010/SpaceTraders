@@ -111,7 +111,7 @@ function Markets() {
   useEffect(() => {
     const auth = async () => {
       setLoading(true);
-      const response = await fetch("https://andrewlu.ca/api/auth",
+      const response = await fetch("/api/auth",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -183,10 +183,9 @@ function Markets() {
       setLoading(false);
     }
     auth();
-    if (Cookies.get("access_token") !== undefined) {
-      getMarket();
-      getShipInfo();
-    }
+    getMarket();
+    getShipInfo();
+
 
   }, [systemid, waypointid, navigate])
 
@@ -280,7 +279,7 @@ function Markets() {
         setOwnedShips(updatedOwnedShips);
 
         setTitle(`Success`);
-        setBody(`You have sucessfully sold ${modalShip.item.units} ${modalShip.item.name} for ${result.data.transaction.totalPrice}`);
+        setBody(`You have successfully sold ${modalShip.item.units} ${modalShip.item.name} for ${result.data.transaction.totalPrice}`);
         setShowMessage(true);
       }
     }
@@ -305,7 +304,7 @@ function Markets() {
             <h2 className={styles.marketTitle}>{waypointid} Market</h2>
             {
 
-              <div className={styles.contracts}>
+              <div className={styles.marketInfo}>
                 <Table
                   sx={{
                     minWidth: 300,
@@ -362,7 +361,7 @@ function Markets() {
             }
           </div>
         ) : (
-          <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}>{loading ? <CircularProgress /> : "No Available Market Items"}</h2>
+          <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}>{loading ? <CircularProgress size="1rem" /> : "No Available Market Items"}</h2>
         )
 
         }
@@ -373,7 +372,7 @@ function Markets() {
             <h2 className={styles.shopTitle}>Available Items In Shop</h2>
             <div className={styles.goods_container}>
               {market.tradeGoods.map((good) => (
-                <div onClick={() => {
+                <div data-testid={`market-item-${good.symbol}`} onClick={() => {
                   setItemName(good.symbol);
                   setTradeVolume(good.tradeVolume);
                   setPurchasePrice(good.purchasePrice);
@@ -472,7 +471,7 @@ function Markets() {
           </>
         ) :
           (
-            <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}>{loading ? <CircularProgress /> : "No Available Items In Shop"}</h2>
+            <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}>{loading ? <CircularProgress size="1rem" /> : "No Available Items In Shop"}</h2>
           )
 
 
@@ -496,7 +495,7 @@ function Markets() {
             <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center", marginTop: "0" }}>
               Total Price: {totalPrice}
             </Typography>
-            <TextField type='number' id="filled-basic" label="Amount" variant="filled" inputProps={propColor} InputLabelProps={propColor} onChange={handleAmountChange} />
+            <TextField data-testid="market-item-amount" type='number' id="filled-basic" label="Amount" variant="filled" inputProps={propColor} InputLabelProps={propColor} onChange={handleAmountChange} />
 
             <FormControl sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem", marginBottom: "1rem" }}>
               <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center", marginTop: "0" }}>
@@ -511,7 +510,7 @@ function Markets() {
               >
                 {ownedShips !== undefined && ownedShips.length > 0 ? (
                   ownedShips.map((ship) => (
-                    <FormControlLabel key={ship.cooldown.shipSymbol} value={ship.cooldown.shipSymbol} control={<Radio sx={{ color: "orange" }} />} label={ship.cooldown.shipSymbol} />
+                    <FormControlLabel data-testid={`market-ship-${ship.cooldown.shipSymbol}`} key={ship.cooldown.shipSymbol} value={ship.cooldown.shipSymbol} control={<Radio sx={{ color: "orange" }} />} label={ship.cooldown.shipSymbol} />
                   ))
                 )
                   :
@@ -524,7 +523,7 @@ function Markets() {
               </RadioGroup>
             </FormControl>
 
-            <Button onClick={submitPurchase}>{purchaseLoading ? <CircularProgress /> : "Confirm Purchase"}</Button>
+            <Button data-testid="purchase-button" onClick={submitPurchase}>{purchaseLoading ? <CircularProgress size="1rem" /> : "Confirm Purchase"}</Button>
           </Box>
         </Modal>
         <Modal
@@ -582,7 +581,7 @@ function Markets() {
                         <TableBody>
                           {ship.cargo.inventory.map((item) => (
 
-                            <TableRow onClick={() => { handleModalShip(ship.cooldown.shipSymbol, item) }} key={item.symbol} className={styles.shipcargo}>
+                            <TableRow data-testid={`${ship.cooldown.shipSymbol}-${item.symbol}`} onClick={() => { handleModalShip(ship.cooldown.shipSymbol, item) }} key={item.symbol} className={styles.shipcargo}>
                               <TableCell
                                 component="th"
                                 scope="row"
@@ -619,15 +618,15 @@ function Markets() {
               <Box className={styles.modalWidth} sx={{ ...modalStyle, margin: "0" }}>
                 {modalShip !== undefined ? (
                   <>
-                    <Typography id="modal-modal-title" variant="h5" component="h2">
+                    <Typography data-testid="sell-modal-title" id="modal-modal-title" variant="h5" component="h2">
                       {modalShip?.shipSymbol
 
                       }
                     </Typography>
                     <div style={{ marginTop: "30px" }}>
-                      <TextField onChange={handleModalShipChange} inputProps={{ style: { color: "orange" } }} InputLabelProps={{ style: { color: "orange" } }} className={styles.inputs} type='number' id={modalShip.item.symbol} label={modalShip.item.name} variant="outlined" value={modalShip.item.units} size='small' />
+                      <TextField data-testid="sell-modal-input" onChange={handleModalShipChange} inputProps={{ style: { color: "orange" } }} InputLabelProps={{ style: { color: "orange" } }} className={styles.inputs} type='number' id={modalShip.item.symbol} label={modalShip.item.name} variant="outlined" value={modalShip.item.units} size='small' />
                     </div>
-                    <Button onClick={handleSell}>{sellLoading ? <CircularProgress /> : "Sell"}</Button>
+                    <Button onClick={handleSell}>{sellLoading ? <CircularProgress size="1rem" /> : "Sell"}</Button>
                   </>
                 )
                   : <div>

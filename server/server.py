@@ -16,18 +16,22 @@ import jsonschema
 import requests
 import secrets
 app = Flask(__name__)
-ssm = boto3.client('ssm', region_name='us-west-1')
-USER_SECRET_KEY = ssm.get_parameter(Name='/USER_SECRET_KEY', WithDecryption=True)['Parameter']['Value']
-HOST_EMAIL = ssm.get_parameter(Name='/HOST_EMAIL', WithDecryption=True)['Parameter']['Value']
-HOST_PASSWORD = ssm.get_parameter(Name='/HOST_PASSWORD', WithDecryption=True)['Parameter']['Value']
-CSRF_SECRET_KEY = ssm.get_parameter(Name='/CSRF_SECRET_KEY', WithDecryption=True)['Parameter']['Value']
 
-os.environ['USER_SECRET_KEY'] = USER_SECRET_KEY
-os.environ['HOST_EMAIL'] = HOST_EMAIL
-os.environ['HOST_PASSWORD'] = HOST_PASSWORD
-os.environ['CSRF_SECRET_KEY'] = CSRF_SECRET_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URL")
+if os.getenv("NODE_ENV") == "production":
+    ssm = boto3.client('ssm', region_name='us-west-1')
+    USER_SECRET_KEY = ssm.get_parameter(Name='/USER_SECRET_KEY', WithDecryption=True)['Parameter']['Value']
+    HOST_EMAIL = ssm.get_parameter(Name='/HOST_EMAIL', WithDecryption=True)['Parameter']['Value']
+    HOST_PASSWORD = ssm.get_parameter(Name='/HOST_PASSWORD', WithDecryption=True)['Parameter']['Value']
+    CSRF_SECRET_KEY = ssm.get_parameter(Name='/CSRF_SECRET_KEY', WithDecryption=True)['Parameter']['Value']
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@spacetraders-database.cg8ga8pxb3sf.us-west-1.rds.amazonaws.com:5432/SpaceTraders'
+    os.environ['USER_SECRET_KEY'] = USER_SECRET_KEY
+    os.environ['HOST_EMAIL'] = HOST_EMAIL
+    os.environ['HOST_PASSWORD'] = HOST_PASSWORD
+    os.environ['CSRF_SECRET_KEY'] = CSRF_SECRET_KEY 
+
+
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAIL_SERVER']='smtp.gmail.com'
@@ -41,12 +45,6 @@ db = SQLAlchemy(app)
 mail = Mail(app)
 CORS(app, supports_credentials=True)
 SSLify = SSLify(app)
-
-cert_path = 'flask-cert.pem'
-key_path = 'flask-key.pem'
-
-
-
 
 
 class Users(db.Model):
@@ -240,4 +238,4 @@ def logout():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True,host="localhost",port=5000,ssl_context=(cert_path, key_path))
+    app.run(debug=True,host="localhost",port=5000)

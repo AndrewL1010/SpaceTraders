@@ -42,7 +42,7 @@ function Systems() {
   useEffect(() => {
     const auth = async () => {
       setLoading(true);
-      const response = await fetch("https://andrewlu.ca/api/auth",
+      const response = await fetch("/api/auth",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -62,7 +62,9 @@ function Systems() {
         }
       }
       const response = await fetch(`https://api.spacetraders.io/v2/systems?page=${currentPage}&limit=20`, options);
+    
       const result = await response.json();
+
       if (result.data !== undefined) {
         const systemList: System[] = result.data.map((system: APISystem) => {
           return {
@@ -79,9 +81,8 @@ function Systems() {
       setLoading(false);
     }
     auth();
-    if (Cookies.get("access_token") !== undefined) {
-      getSystems();
-    }
+    getSystems();
+
 
   }, [currentPage, navigate])
 
@@ -98,7 +99,6 @@ function Systems() {
     }
   })
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    console.log(event);
     localStorage.setItem("last-systems-page", page.toString())
     setCurrentPage(page);
   }
@@ -112,7 +112,7 @@ function Systems() {
             <div className={styles.container}>
               {
                 systems.map((system) => (
-                  <div key={system.symbol} className={styles.systems} onClick={() => { redirect(system.symbol) }}>
+                  <div data-testid={`redirect test ${system.symbol}`} key={system.symbol} className={styles.systems} onClick={() => { redirect(system.symbol) }}>
                     <Table
                       key={system.symbol}
                       sx={{
@@ -211,7 +211,7 @@ function Systems() {
 
 
                   </div>
-      
+
                 ))
               }
 
@@ -237,7 +237,7 @@ function Systems() {
             />
           </div>
         ) : (
-          <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}> {loading ? <CircularProgress /> : "No Available Systems"}</h2>
+          <h2 style={{ display: "flex", justifyContent: "center", marginTop: 100 }}> {loading ? <CircularProgress size="1rem" /> : "No Available Systems"}</h2>
         )
 
         }

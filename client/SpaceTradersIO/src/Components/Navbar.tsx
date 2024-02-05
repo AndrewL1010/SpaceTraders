@@ -11,7 +11,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { createTheme, ThemeProvider } from "@mui/material";
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import cookies from 'js-cookie';
@@ -97,7 +96,7 @@ function Navbar() {
     })
 
     const logout = async () => {
-        const response = await fetch("https://andrewlu.ca/api/logout",
+        const response = await fetch("/api/logout",
             {
                 method: "POST",
                 headers: {
@@ -192,7 +191,7 @@ function Navbar() {
                                     ))}
                                 </Menu>
                             </Box>
-                            <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                            <RocketLaunchIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                             <Typography
                                 variant="h5"
                                 noWrap

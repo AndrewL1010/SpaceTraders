@@ -5,6 +5,10 @@ import { useGlobalContext } from '../../contexts/PlayerInfoContext';
 import Cookies from 'js-cookie';
 interface Props {
     ship: Ship,
+    setShips: React.Dispatch<React.SetStateAction<Ship[] | undefined>>,
+    systemid: string | undefined,
+    waypointid: string | undefined
+
 }
 const modalStyle = {
     position: 'absolute',
@@ -29,7 +33,34 @@ function PurchaseButton(props: Props) {
     const [showMessage, setShowMessage] = useState<boolean>(false);
     const [title, setTitle] = useState<string>("");
     const [body, setBody] = useState<string>("");
-    const { ship } = props;
+    const { ship, setShips, systemid, waypointid } = props;
+    const getShips = async () => {
+        const options = {
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': `Bearer ${Cookies.get("access_token")}`
+            }
+        }
+        if (systemid !== undefined && waypointid !== undefined) {
+            const response = await fetch(`https://api.spacetraders.io/v2/systems/${systemid}/waypoints/${waypointid}/shipyard`, options);
+            const result = await response.json();
+            if (result.data.ships !== undefined) {
+                const shipList: Ship[] = result.data.ships.map((ship: Ship) => {
+                    return {
+                        type: ship.type,
+                        name: ship.name,
+                        description: ship.description,
+                        purchasePrice: ship.purchasePrice,
+                        waypointSymbol: waypointid,
+                        modules: ship.modules.map((module) => {
+                            return { symbol: module.symbol, name: module.name }
+                        })
+                    }
+                })
+                setShips(shipList);
+            }
+        }
+    }
 
 
     const buyShip = async (ship: Ship) => {
@@ -59,6 +90,7 @@ function PurchaseButton(props: Props) {
                 setShowMessage(true);
                 const updatedPlayerInfo = { ...playerInfo, credits: playerInfo.credits - ship.purchasePrice, shipCount: playerInfo.shipCount + 1 };
                 setPlayerInfo(updatedPlayerInfo);
+                getShips();
             }
         }
         setLoading(false);
@@ -66,7 +98,7 @@ function PurchaseButton(props: Props) {
     }
     return (
         <>
-            <Button key={ship.type} onClick={() => { buyShip(ship) }}>{loading ? <CircularProgress /> : "Purchase"}</Button>
+            <Button data-testid={`ship-purchase-button-${ship.name}`} key={ship.type} onClick={() => { buyShip(ship) }}>{loading ? <CircularProgress size="1rem" /> : "Purchase"}</Button>
             <Modal
                 open={showMessage}
                 onClose={() => { setShowMessage(false) }}

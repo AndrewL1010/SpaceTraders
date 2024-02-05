@@ -1,7 +1,7 @@
 import { createContext, useContext, Dispatch, SetStateAction, useState, ReactNode } from 'react';
 import { useEffect } from 'react'
 import headers from './playerOptions';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 
 export interface PlayerData {
     accountId: string,
@@ -17,20 +17,10 @@ interface ContextProps {
     playerInfo: PlayerData,
     setPlayerInfo: Dispatch<SetStateAction<PlayerData>>
 }
-const PlayerInfoContext = createContext<ContextProps>({
-    playerInfo: {
-        accountId: "",
-        symbol: "",
-        headquarters: "",
-        credits: 0,
-        startingFaction: "",
-        shipCount: 0,
-    },
-    setPlayerInfo: () => { },
-});
+const PlayerInfoContext = createContext<ContextProps | undefined>(undefined);
 
 export const GlobalPlayerInfoContextProvider = ({ children }: { children: ReactNode }) => {
-    
+
     useEffect(() => {
         const getPlayerInfo = async () => {
             const response = await fetch('https://api.spacetraders.io/v2/my/agent', headers);
@@ -41,9 +31,8 @@ export const GlobalPlayerInfoContextProvider = ({ children }: { children: ReactN
             }
         };
 
-        if(Cookies.get("access_token") !== undefined){
-            getPlayerInfo();
-        }
+        getPlayerInfo();
+
     }, []);
 
     const [playerInfo, setPlayerInfo] = useState<PlayerData>({
@@ -64,6 +53,12 @@ export const GlobalPlayerInfoContextProvider = ({ children }: { children: ReactN
 
 
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useGlobalContext = () => useContext(PlayerInfoContext);
+
+export const useGlobalContext = () => {
+    const value = useContext(PlayerInfoContext);
+    if(value === undefined){
+        throw new Error("Player info context provider is required");
+    }
+    return value;
+};
 

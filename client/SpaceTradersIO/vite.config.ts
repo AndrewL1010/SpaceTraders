@@ -9,9 +9,11 @@ export default defineConfig({
   server: {
     host: "localhost",
     port: 5001,
-    https: {
-      key: 'key.pem',
-      cert: 'cert.pem'
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000', 
+  
+      },
     },
   }
 })
