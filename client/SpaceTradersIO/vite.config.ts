@@ -5,6 +5,7 @@ import dns from 'dns'
 
 dns.setDefaultResultOrder('verbatim')
 export default defineConfig({
+  base: "https://d37ij6ny6hvldl.cloudfront.net",
   plugins: [react()],
   server: {
     host: "localhost",
