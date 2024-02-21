@@ -495,7 +495,7 @@ function Markets() {
             <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center", marginTop: "0" }}>
               Total Price: {totalPrice}
             </Typography>
-            <TextField data-testid="market-item-amount" type='number' id="filled-basic" label="Amount" variant="filled" inputProps={propColor} InputLabelProps={propColor} onChange={handleAmountChange} />
+            <TextField data-cy="item-amount-input" data-testid="market-item-amount" type='number' id="filled-basic" label="Amount" variant="filled" inputProps={propColor} InputLabelProps={propColor} onChange={handleAmountChange} />
 
             <FormControl sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "3rem", marginBottom: "1rem" }}>
               <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center", marginTop: "0" }}>
@@ -510,7 +510,7 @@ function Markets() {
               >
                 {ownedShips !== undefined && ownedShips.length > 0 ? (
                   ownedShips.map((ship) => (
-                    <FormControlLabel data-testid={`market-ship-${ship.cooldown.shipSymbol}`} key={ship.cooldown.shipSymbol} value={ship.cooldown.shipSymbol} control={<Radio sx={{ color: "orange" }} />} label={ship.cooldown.shipSymbol} />
+                    <FormControlLabel data-cy={`market-ship-${ship.cooldown.shipSymbol}`} data-testid={`market-ship-${ship.cooldown.shipSymbol}`} key={ship.cooldown.shipSymbol} value={ship.cooldown.shipSymbol} control={<Radio sx={{ color: "orange" }} />} label={ship.cooldown.shipSymbol} />
                   ))
                 )
                   :
@@ -523,19 +523,20 @@ function Markets() {
               </RadioGroup>
             </FormControl>
 
-            <Button data-testid="purchase-button" onClick={submitPurchase}>{purchaseLoading ? <CircularProgress size="1rem" /> : "Confirm Purchase"}</Button>
+            <Button data-cy="confirm-purchase-button" data-testid="purchase-button" onClick={submitPurchase}>{purchaseLoading ? <CircularProgress size="1rem" /> : "Confirm Purchase"}</Button>
           </Box>
         </Modal>
         <Modal
+          data-cy="market-modal-message"
           open={showMessage}
           onClose={() => { setShowMessage(false) }}
 
         >
           <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
-            <Typography id="modal-modal-title" variant="h5" component="h2">
+            <Typography data-cy="message-modal-title" id="modal-modal-title" variant="h5" component="h2">
               {title}
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
+            <Typography data-cy="message-modal-body" id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
               {body}
             </Typography>
           </Box>
@@ -581,7 +582,7 @@ function Markets() {
                         <TableBody>
                           {ship.cargo.inventory.map((item) => (
 
-                            <TableRow data-testid={`${ship.cooldown.shipSymbol}-${item.symbol}`} onClick={() => { handleModalShip(ship.cooldown.shipSymbol, item) }} key={item.symbol} className={styles.shipcargo}>
+                            <TableRow data-cy={`${ship.cooldown.shipSymbol}-${item.symbol}`} data-testid={`${ship.cooldown.shipSymbol}-${item.symbol}`} onClick={() => { handleModalShip(ship.cooldown.shipSymbol, item) }} key={item.symbol} className={styles.shipcargo}>
                               <TableCell
                                 component="th"
                                 scope="row"
@@ -618,15 +619,15 @@ function Markets() {
               <Box className={styles.modalWidth} sx={{ ...modalStyle, margin: "0" }}>
                 {modalShip !== undefined ? (
                   <>
-                    <Typography data-testid="sell-modal-title" id="modal-modal-title" variant="h5" component="h2">
+                    <Typography data-cy="sell-modal-title" data-testid="sell-modal-title" id="modal-modal-title" variant="h5" component="h2">
                       {modalShip?.shipSymbol
 
                       }
                     </Typography>
                     <div style={{ marginTop: "30px" }}>
-                      <TextField data-testid="sell-modal-input" onChange={handleModalShipChange} inputProps={{ style: { color: "orange" } }} InputLabelProps={{ style: { color: "orange" } }} className={styles.inputs} type='number' id={modalShip.item.symbol} label={modalShip.item.name} variant="outlined" value={modalShip.item.units} size='small' />
+                      <TextField data-cy="sell-modal-input" data-testid="sell-modal-input" onChange={handleModalShipChange} inputProps={{ style: { color: "orange" } }} InputLabelProps={{ style: { color: "orange" } }} className={styles.inputs} type='number' id={modalShip.item.symbol} label={modalShip.item.name} variant="outlined" value={modalShip.item.units} size='small' />
                     </div>
-                    <Button onClick={handleSell}>{sellLoading ? <CircularProgress size="1rem" /> : "Sell"}</Button>
+                    <Button data-cy="sell-modal-confirm-button" onClick={handleSell}>{sellLoading ? <CircularProgress size="1rem" /> : "Sell"}</Button>
                   </>
                 )
                   : <div>

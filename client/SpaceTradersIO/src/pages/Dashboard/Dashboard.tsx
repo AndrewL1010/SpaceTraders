@@ -56,6 +56,8 @@ interface OwnedShip {
         symbol: string,
         type: string,
         systemSymbol: string,
+        x: string,
+        y: string
       }
     }
     status: string,
@@ -169,6 +171,8 @@ function Dashboard() {
                   symbol: ship.nav.route.destination.symbol,
                   type: ship.nav.route.destination.type,
                   systemSymbol: ship.nav.route.destination.systemSymbol,
+                  x: ship.nav.route.destination.x,
+                  y: ship.nav.route.destination.y
                 }
               },
               status: ship.nav.status
@@ -267,14 +271,14 @@ function Dashboard() {
     }
     else {
       if (result.data.transaction.totalPrice === 0) {
-  
+
         setTitle("Error");
         setBody("Your fuel tank is already full");
         setShowMessage(true);
       }
       else {
         setPlayerInfo({ ...playerInfo, credits: playerInfo.credits - result.data.transaction.totalPrice });
-        setTitle("Refuel");
+        setTitle("Refuel Successful");
         setBody(`at ${result.data.transaction.pricePerUnit} per unit of fuel you have bought ${result.data.transaction.units} units of fuel at a total of ${result.data.transaction.totalPrice}`);
         setShowMessage(true);
       }
@@ -330,7 +334,7 @@ function Dashboard() {
       <ThemeProvider theme={theme}>
         {ships ? (
           <>
-            <h2 className={styles.title}>Your Ships</h2>
+            <h2 id="dashboard-ship-title" className={styles.title}>Your Ships</h2>
             <div className={styles.container}>
 
               {
@@ -372,11 +376,25 @@ function Dashboard() {
                             scope="row"
                             sx={{ borderColor: "black", fontWeight: "bold" }}
                           >
-                            status
+                            Status
                           </TableCell>
                           <TableCell align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
-                            {ship.nav.status === "DOCKED" ? (<span>{ship.nav.status} at <span data-testid={`test-status-${ship.nav.waypointSymbol}`} className={styles.ship_waypoints} onClick={() => { handleShipWaypoint(ship.waypoint_traits, ship.nav.waypointSymbol, ship.nav.systemSymbol, ship.waypoint_type) }}>{ship.nav.waypointSymbol}</span></span>) : ship.nav.status}
+                            {ship.nav.status === "DOCKED" ? (<span>{ship.nav.status} at <span data-cy={`ship-status-${ship.cooldown.shipSymbol}`} data-testid={`test-status-${ship.nav.waypointSymbol}`} className={styles.ship_waypoints} onClick={() => { handleShipWaypoint(ship.waypoint_traits, ship.nav.waypointSymbol, ship.nav.systemSymbol, ship.waypoint_type) }}>{ship.nav.waypointSymbol}</span></span>) : ship.nav.status}
                           </TableCell>
+
+                        </TableRow>
+                        <TableRow>
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            sx={{ borderColor: "black", fontWeight: "bold" }}
+                          >
+                            Location
+                          </TableCell>
+                          <TableCell align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
+                            <p data-cy={`coordinates-${ship.cooldown.shipSymbol}`} className={styles.p}>{ship.nav.route.destination.x},{ship.nav.route.destination.y}</p>
+                          </TableCell>
+
                         </TableRow>
                         <TableRow>
                           <TableCell
@@ -411,7 +429,7 @@ function Dashboard() {
                             Current System
                           </TableCell>
                           <TableCell align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
-                            <span data-testid={`ship-current-system-id ${ship.cooldown.shipSymbol}`} className={styles.currentsystem} onClick={() => { navigate(`/Waypoints/${ship.nav.systemSymbol}`); }}>{ship.nav.systemSymbol}</span>
+                            <span data-cy={`ship-current-system-${ship.cooldown.shipSymbol}`} data-testid={`ship-current-system-id ${ship.cooldown.shipSymbol}`} className={styles.currentsystem} onClick={() => { navigate(`/Waypoints/${ship.nav.systemSymbol}`); }}>{ship.nav.systemSymbol}</span>
                           </TableCell>
                         </TableRow>
                         <TableRow>
@@ -468,21 +486,21 @@ function Dashboard() {
                       {ship.nav.status === "DOCKED" ?
                         (
 
-                          <Button data-testid={`test-undock-${ship.cooldown.shipSymbol}`} onClick={() => { handleDocking(ship.cooldown.shipSymbol, "undock") }}>{dockLoading ? <CircularProgress size="1rem" /> : "Undock"}</Button>
+                          <Button data-cy={`undock-button-${ship.cooldown.shipSymbol}`} data-testid={`test-undock-${ship.cooldown.shipSymbol}`} onClick={() => { handleDocking(ship.cooldown.shipSymbol, "undock") }}>{dockLoading ? <CircularProgress size="1rem" /> : "Undock"}</Button>
 
 
                         )
                         :
                         (
                           <>
-                            <Button data-testid={`test-dock-${ship.cooldown.shipSymbol}`} onClick={() => { handleDocking(ship.cooldown.shipSymbol, "dock") }}>{dockLoading ? <CircularProgress size="1rem" /> : "Dock"}</Button>
-                            <Button  data-testid={`test-extract-${ship.cooldown.shipSymbol}`} onClick={() => { extract(ship.cooldown.shipSymbol) }}>{extractLoading ? <CircularProgress size="1rem" /> : "Extract"}</Button>
+                            <Button data-cy={`dock-button-${ship.cooldown.shipSymbol}`} data-testid={`test-dock-${ship.cooldown.shipSymbol}`} onClick={() => { handleDocking(ship.cooldown.shipSymbol, "dock") }}>{dockLoading ? <CircularProgress size="1rem" /> : "Dock"}</Button>
+                            <Button data-cy={`extract-button-${ship.cooldown.shipSymbol}`} data-testid={`test-extract-${ship.cooldown.shipSymbol}`} onClick={() => { extract(ship.cooldown.shipSymbol) }}>{extractLoading ? <CircularProgress size="1rem" /> : "Extract"}</Button>
                           </>
                         )
 
                       }
 
-                      <Button data-testid={`test-refuel-${ship.cooldown.shipSymbol}`} onClick={() => { handleRefuel(ship.cooldown.shipSymbol) }}>{refuelLoading ? <CircularProgress size="1rem" /> : "Refuel"}</Button>
+                      <Button data-cy={`refuel-button-${ship.cooldown.shipSymbol}`} data-testid={`test-refuel-${ship.cooldown.shipSymbol}`} onClick={() => { handleRefuel(ship.cooldown.shipSymbol) }}>{refuelLoading ? <CircularProgress size="1rem" /> : "Refuel"}</Button>
 
                     </div>
                   </div>
@@ -493,6 +511,8 @@ function Dashboard() {
 
               }
               <Modal
+                data-cy="dashboard-modal-message-container"
+                data-testid="dashboard-modal-message-container"
                 open={showMessage}
                 onClose={() => { setShowMessage(false) }}
 
@@ -501,7 +521,7 @@ function Dashboard() {
                   <Typography id="modal-modal-title" variant="h5" component="h2">
                     {title}
                   </Typography>
-                  <Typography id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center", marginTop: "0" }}>
+                  <Typography data-cy="dashboard-modal-message-body" id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center", marginTop: "0" }}>
                     {body}
                   </Typography>
                 </Box>
@@ -513,6 +533,8 @@ function Dashboard() {
               <Modal
                 open={showtraits}
                 onClose={() => { setShowtraits(false) }}
+                data-testid="planet-description-modal"
+                data-cy="planet-description-modal"
 
               >
                 <Box className={styles.modalWidth} sx={{ ...modalStyle, margin: "0" }}>

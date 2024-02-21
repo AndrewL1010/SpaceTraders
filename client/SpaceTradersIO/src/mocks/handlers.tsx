@@ -3,9 +3,13 @@ import * as MockData from './ExpectedData';
 
 export const handlers = [
     http.post('/api/login', () => {
-        return new HttpResponse(null, {
-            status: 201,
-        })
+        return HttpResponse.json(
+            {
+                status: 201,
+                message: {
+                    "message": "user is authenticated",
+                }
+            })
     }),
     http.get('https://api.spacetraders.io/v2/my/agent', () => {
         return HttpResponse.json(

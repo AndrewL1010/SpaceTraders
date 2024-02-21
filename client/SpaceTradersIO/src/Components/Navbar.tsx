@@ -269,7 +269,7 @@ function Navbar() {
                 <Table sx={{ minWidth: 300, maxWidth: 500, backgroundColor: "orange", borderColor: "black", marginLeft: "auto", marginRight: "auto", borderRadius: 2 }} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ textAlign: "center", borderTop: 1, borderColor: "black", fontWeight: "bold" }} colSpan={2}>{playerInfo.symbol}</TableCell>
+                            <TableCell data-cy="player-id" sx={{ textAlign: "center", borderTop: 1, borderColor: "black", fontWeight: "bold" }} colSpan={2}>{playerInfo.symbol}</TableCell>
 
                         </TableRow>
                     </TableHead>

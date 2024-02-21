@@ -112,7 +112,7 @@ function Systems() {
             <div className={styles.container}>
               {
                 systems.map((system) => (
-                  <div data-testid={`redirect test ${system.symbol}`} key={system.symbol} className={styles.systems} onClick={() => { redirect(system.symbol) }}>
+                  <div data-cy="system-item" data-testid={`redirect test ${system.symbol}`} key={system.symbol} className={styles.systems} onClick={() => { redirect(system.symbol) }}>
                     <Table
                       key={system.symbol}
                       sx={{

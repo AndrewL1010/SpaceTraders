@@ -187,7 +187,6 @@ function Waypoints() {
   return (
     <>
       <Navbar />
-      <Button data-testid='waypointsbuttontest'>vitest</Button>
       <ThemeProvider theme={theme}>
         {waypoints !== undefined && waypoints.length > 0 ? (
           <div className={styles.parent}>
@@ -195,7 +194,7 @@ function Waypoints() {
             <div className={styles.container}>
               {
                 waypoints.map((waypoint) => (
-                  <div key={waypoint.symbol} className={styles.waypoints}>
+                  <div data-key={waypoint.symbol} data-testid={`waypoint-container-${waypoint.type}-${waypoint.symbol}`} data-cy={`waypoint-container-${waypoint.type}`} key={waypoint.symbol} className={styles.waypoints}>
                     <Table
                       key={waypoint.symbol}
                       sx={{
@@ -213,6 +212,7 @@ function Waypoints() {
                       <TableHead>
                         <TableRow>
                           <TableCell
+                          data-cy={`waypoint-symbol-title-${waypoint.symbol}`}
                             sx={{
                               textAlign: "center",
                               borderTop: 1,
@@ -234,7 +234,7 @@ function Waypoints() {
                           >
                             Symbol
                           </TableCell>
-                          <TableCell align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
+                          <TableCell data-cy="waypointSymbol" id="waypointSymbol" align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
                             {waypoint.symbol}
                           </TableCell>
                         </TableRow>
@@ -258,7 +258,7 @@ function Waypoints() {
                           >
                             X
                           </TableCell>
-                          <TableCell align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
+                          <TableCell id="waypointX" data-cy={`waypoint-x-${waypoint.symbol}`} align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
                             {waypoint.x}
                           </TableCell>
                         </TableRow>
@@ -270,7 +270,7 @@ function Waypoints() {
                           >
                             Y
                           </TableCell>
-                          <TableCell align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
+                          <TableCell id="waypointY" data-cy={`waypoint-y-${waypoint.symbol}`} align="right" sx={{ borderColor: "black", fontWeight: "bold" }}>
                             {waypoint.y}
                           </TableCell>
                         </TableRow>
@@ -297,7 +297,7 @@ function Waypoints() {
                       </TableBody>
 
                     </Table>
-                    <Button data-testid={`test-travel-${waypoint.symbol}`} onClick={() => { ShowShipOptions(waypoint.symbol) }}>Travel</Button>
+                    <Button data-cy={`travel-button-${waypoint.type}`} data-testid={`test-travel-${waypoint.symbol}`} onClick={() => { ShowShipOptions(waypoint.symbol) }}>Travel</Button>
                   </div>
 
                 ))
@@ -307,7 +307,7 @@ function Waypoints() {
               <Modal
                 open={showShipOptions}
                 onClose={() => { setShowShipOptions(false) }}
-
+          
               >
                 <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
                   <Typography id="modal-modal-title" variant="h5" component="h2">
@@ -346,7 +346,7 @@ function Waypoints() {
                         >
                           <h3>Form of Travel</h3>
                           <FormControlLabel value={"warp"} control={<Radio sx={{ color: "orange" }} />} label={"Warp"} />
-                          <FormControlLabel data-testid='test-waypoint-travel' value={"navigate"} control={<Radio sx={{ color: "orange" }} />} label={"Travel"} />
+                          <FormControlLabel data-cy="travel-mode" data-testid='test-waypoint-travel' value={"navigate"} control={<Radio sx={{ color: "orange" }} />} label={"Travel"} />
                         </RadioGroup>
                       </div>
                     </FormControl>
@@ -355,15 +355,16 @@ function Waypoints() {
                 </Box>
               </Modal>
               <Modal
+              data-cy="travel-modal-container"
                 open={showMessage}
                 onClose={() => { setShowMessage(false) }}
 
               >
-                <Box className={styles.modalWidth} sx={{ ...modalStyle }}>
+                <Box data-cy="modal-message-container" className={styles.modalWidth} sx={{ ...modalStyle }}>
                   <Typography data-testid='test-title' id="modal-modal-title" variant="h5" component="h2">
                     {title}
                   </Typography>
-                  <Typography data-testid="test-body" id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
+                  <Typography data-cy="modal-body" data-testid="test-body" id="modal-modal-description" sx={{ mt: 2, color: "orange", display: "flex", justifyContent: "center" }}>
                     {body}
                   </Typography>
                 </Box>

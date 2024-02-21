@@ -4,7 +4,7 @@
 import { it, expect } from 'vitest';
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MemoryRouter } from 'react-router-dom';
-import Dashboard from '../Dashboard/Dashboard';
+import Dashboard from './Dashboard';
 import { GlobalPlayerInfoContextProvider } from '../../contexts/PlayerInfoContext';
 
 const mocks = vi.hoisted(() => {

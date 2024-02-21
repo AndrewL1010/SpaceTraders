@@ -273,7 +273,7 @@ function Contracts() {
                                 contracts.map((contract) => {
                                     if (contract.fulfilled !== true) {
                                         return (
-                                            <div className={styles.contracts} key={contract.id}>
+                                            <div data-cy="contract-container" className={styles.contracts} key={contract.id}>
                                                 <Table
                                                     key={contract.id}
                                                     sx={{
@@ -394,7 +394,7 @@ function Contracts() {
                                                 )
 
 
-                                                    : <Button data-testid="contract-accept-button" onClick={() => { acceptContract(contract.id) }}>{loading ? <CircularProgress size="1rem" /> : "Accept"}</Button>}
+                                                    : <Button data-cy="contract-accept-button" data-testid="contract-accept-button" onClick={() => { acceptContract(contract.id) }}>{loading ? <CircularProgress size="1rem" /> : "Accept"}</Button>}
 
                                             </div>
                                         )

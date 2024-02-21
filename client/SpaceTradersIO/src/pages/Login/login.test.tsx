@@ -33,7 +33,7 @@ it("Should display login page", async () => {
 
     expect(screen.getByText("SpaceTraders")).toBeInTheDocument();
     expect(screen.getByLabelText("username")).toBeInTheDocument();
-    expect(screen.getByLabelText("token")).toBeInTheDocument();
+    expect(screen.getByLabelText("password")).toBeInTheDocument();
     expect(screen.getByText("Login")).toBeInTheDocument();
     expect(screen.getByText("Register")).toBeInTheDocument();
     expect(screen.getByText("Register")).toBeInTheDocument()
@@ -52,10 +52,10 @@ it("Should Login and navigate to Dashboard page", async () => {
     )
 
     const username = "alu1029";
-    const token = await import.meta.env.TEST_TOKEN
+    const password = "password"
     fireEvent.change(screen.getByLabelText("username"), { target: { value: username } });
-    fireEvent.change(screen.getByLabelText("token"), { target: { value: token } });
-    fireEvent.click(screen.getByText("Login"));
+    fireEvent.change(screen.getByLabelText("password"), { target: { value: password } });
+    fireEvent.click(screen.getByTestId("login-button"));
 
     await waitFor(() => {
         expect(mocks.navigate).toHaveBeenCalledWith("/Dashboard")
@@ -74,19 +74,22 @@ it("Should register for a new account", async () => {
     )
 
     const username = "alu1029";
+    const password = "password";
     const email = "fakeEmail@gmail.com";
     fireEvent.click(screen.getByText("Register"));
     await waitFor(() => {
         expect(screen.getByTestId("test-username-field")).toBeInTheDocument();
+        expect(screen.getByTestId("test-password-field")).toBeInTheDocument();
         expect(screen.getByTestId("test-email-field")).toBeInTheDocument();
     })
     fireEvent.change(screen.getByPlaceholderText("Enter Desired Username..."), { target: { value: username } });
+    fireEvent.change(screen.getByPlaceholderText("Enter Password..."), { target: { value: password } });
     fireEvent.change(screen.getByPlaceholderText("Enter Email..."), { target: { value: email } });
     fireEvent.click(screen.getByText("Create Account"));
 
     await waitFor(async () => {
-        expect(screen.getByText("Account Created")).toBeInTheDocument();
-        expect(screen.getByText("Please check your email and login with the provided token")).toBeInTheDocument();
+        expect(screen.getByText("Pending Verification")).toBeInTheDocument();
+        expect(screen.getByText("Please check your email and verify your account")).toBeInTheDocument();
     });
 
 })
