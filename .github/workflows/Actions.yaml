@@ -1,0 +1,94 @@
+name: Test and deploy to S3
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  integration_test_Vitest:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: client/SpaceTradersIO
+
+      - name: Integration Test
+        run: npm run test
+        working-directory: client/SpaceTradersIO
+
+
+  integration_test_Pytest:
+    runs-on: ubuntu-latest
+
+    env:
+      USER_SECRET_KEY: ${{ secrets.USER_SECRET_KEY }}
+      HOST_EMAIL: ${{ secrets.HOST_EMAIL }}
+      HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
+      CSRF_SECRET_KEY: ${{ secrets.CSRF_SECRET_KEY }}
+      SERVER_ENV: ${{ secrets.SERVER_ENV }}
+      TEST_TOKEN: ${{ secrets.TEST_TOKEN }}
+      DEBUG_PRINT_LIMIT: ${{ secrets.DEBUG_PRINT_LIMIT }}
+      DB_URL: ${{ secrets.DB_URL }}
+      EMAIL_SECRET_KEY: ${{ secrets.EMAIL_SECRET_KEY }}
+      LOCAL_HOST_URL: ${{ secrets.LOCAL_HOST_URL }}
+      BACK_END_URL: ${{ secrets.BACK_END_URL }}
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10.11"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      working-directory: server
+    - name: Test with pytest
+      run: |
+        pytest
+      working-directory: server
+
+  deploy:
+    needs: [integration_test_Vitest, integration_test_Pytest]
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: client/SpaceTradersIO
+
+      - name: Build
+        run: npm run build
+        working-directory: client/SpaceTradersIO
+
+      - name: Upload S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-west-1'
+          SOURCE_DIR: 'client/SpaceTradersIO/dist'
